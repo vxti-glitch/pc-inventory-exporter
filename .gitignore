@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.coverage
+htmlcov/
+inventory_*.txt
+inventory_*.csv
+inventory_*.json
+.env
+venv/
+.venv/

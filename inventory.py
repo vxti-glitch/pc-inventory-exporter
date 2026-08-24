@@ -20,10 +20,11 @@ import csv
 import datetime
 import getpass
 import io
+import json
 import os
 import platform
-import subprocess
 import sys
+from pathlib import Path
 
 # Force UTF-8 output so any unicode chars render on all Windows consoles
 if sys.stdout.encoding and sys.stdout.encoding.lower() != "utf-8":
@@ -277,6 +278,12 @@ def write_csv_report(data, filepath):
             writer.writerow([p])
 
 
+def write_json_report(data, filepath):
+    with open(filepath, "w", encoding="utf-8") as f:
+        json.dump(data, f, indent=2)
+        f.write("\n")
+
+
 # ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
@@ -287,28 +294,43 @@ def main():
     )
     parser.add_argument("--txt", action="store_true", help="Generate .txt report only")
     parser.add_argument("--csv", action="store_true", help="Generate .csv report only")
+    parser.add_argument("--json", action="store_true", help="Generate .json report")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=Path(__file__).parent,
+        help="Directory for generated reports. Default: script directory.",
+    )
     args = parser.parse_args()
 
-    do_txt = not args.csv   # default: both; --csv disables txt
-    do_csv = not args.txt   # default: both; --txt disables csv
+    requested_format = args.txt or args.csv or args.json
+    do_txt = args.txt or not requested_format
+    do_csv = args.csv or not requested_format
+    do_json = args.json
 
     print("[*] Collecting system inventory...")
     data = collect_all()
     ts = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
-    out_dir = os.path.dirname(os.path.abspath(__file__))
+    out_dir = args.output
+    out_dir.mkdir(parents=True, exist_ok=True)
 
     if do_txt:
         report = build_txt_report(data)
-        txt_path = os.path.join(out_dir, f"inventory_{ts}.txt")
+        txt_path = out_dir / f"inventory_{ts}.txt"
         with open(txt_path, "w", encoding="utf-8") as f:
             f.write(report)
         print(report)
-        print(f"\n[✓] Text report saved: {txt_path}")
+        print(f"\n[OK] Text report saved: {txt_path}")
 
     if do_csv:
-        csv_path = os.path.join(out_dir, f"inventory_{ts}.csv")
+        csv_path = out_dir / f"inventory_{ts}.csv"
         write_csv_report(data, csv_path)
-        print(f"[✓] CSV  report saved: {csv_path}")
+        print(f"[OK] CSV  report saved: {csv_path}")
+
+    if do_json:
+        json_path = out_dir / f"inventory_{ts}.json"
+        write_json_report(data, json_path)
+        print(f"[OK] JSON report saved: {json_path}")
 
 
 if __name__ == "__main__":

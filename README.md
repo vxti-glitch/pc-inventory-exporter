@@ -2,7 +2,7 @@
 
 [github.com/vxti-glitch](https://github.com/vxti-glitch)
 
-Gathers a full machine inventory — OS, CPU, RAM, disks, network adapters, and installed programs — and exports it as a formatted `.txt` report and a `.csv` file for asset management use.
+Gathers a full machine inventory - OS, CPU, RAM, disks, network adapters, and installed programs - and exports it as formatted `.txt`, `.csv`, and optional `.json` reports for asset management use.
 
 ---
 
@@ -33,7 +33,7 @@ MEMORY
 
 DISK DRIVES
 ------------------------------------------------------------
-  C:\  (NTFS)  →  C:\
+  C:\  (NTFS)  ->  C:\
     Total: 476.8 GB  |  Used: 210.3 GB (44.1%)  |  Free: 266.5 GB
 
 NETWORK ADAPTERS
@@ -43,11 +43,11 @@ NETWORK ADAPTERS
 
 INSTALLED PROGRAMS (142 found)
 ------------------------------------------------------------
-  • 7-Zip 23.01
-  • Google Chrome
-  • Microsoft Visual C++ 2022 Redistributable
-  • Python 3.12.0
-  • ...
+  - 7-Zip 23.01
+  - Google Chrome
+  - Microsoft Visual C++ 2022 Redistributable
+  - Python 3.12.0
+  - ...
 ```
 
 ---
@@ -56,7 +56,7 @@ INSTALLED PROGRAMS (142 found)
 
 ```bash
 # Install dependency
-pip install psutil
+pip install -r requirements.txt
 
 # Generate both .txt and .csv reports (default)
 python inventory.py
@@ -66,11 +66,21 @@ python inventory.py --txt
 
 # CSV only
 python inventory.py --csv
+
+# JSON snapshot, written to a specific folder
+python inventory.py --json --output reports
 ```
 
-Reports are saved in the same directory as the script with a timestamped filename:
+Reports are saved in the same directory as the script by default, or in `--output DIR`, with a timestamped filename:
 - `inventory_20260803_201500.txt`
 - `inventory_20260803_201500.csv`
+- `inventory_20260803_201500.json`
+
+Run tests:
+
+```bash
+python -m unittest discover -s tests -v
+```
 
 ---
 
@@ -90,7 +100,7 @@ Reports are saved in the same directory as the script with a timestamped filenam
 
 Asset inventory and machine documentation are standard Help Desk tasks. When a user needs remote support, being able to quickly generate and share a machine snapshot accelerates diagnosis. This tool automates the collection process that would otherwise require opening 5–6 different menus manually.
 
-The CSV output is formatted to be imported directly into a spreadsheet-based asset register — the same workflow used in small IT teams that haven't yet deployed a formal MDM or asset management system.
+The CSV output is formatted to be imported directly into a spreadsheet-based asset register - the same workflow used in small IT teams that have not yet deployed a formal MDM or asset management system.
 
 **Skills:** Python · psutil · Windows registry (winreg) · Asset documentation · CSV reporting
 
