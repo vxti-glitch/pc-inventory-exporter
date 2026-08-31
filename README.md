@@ -1,5 +1,9 @@
 # PC Inventory Exporter
 
+> **DEPRECATED — archive after this notice is merged.** This broad inventory exporter is superseded by the narrower [Windows First-Response System Snapshot](https://github.com/vxti-glitch/windows-system-health-checker), which includes configurable observations, safe-share redaction, tests, and explicit evidence limits. History is preserved for transparency.
+
+> **Privacy warning:** Raw inventory can expose usernames, hostnames, IP/MAC addresses, storage paths, device identifiers, installed software, and organization-specific network data. Do not publish or attach its output without authorization and manual redaction. This historical tool does not provide a complete data-loss-prevention control.
+
 [github.com/vxti-glitch](https://github.com/vxti-glitch)
 
 Gathers a full machine inventory - OS, CPU, RAM, disks, network adapters, and installed programs - and exports it as formatted `.txt`, `.csv`, and optional `.json` reports for asset management use.
